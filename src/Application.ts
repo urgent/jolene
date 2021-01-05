@@ -31,6 +31,7 @@ export class Application {
         let link1 = port.link(port2);
 
         this.activeModel.addAll(node1, node2, link1);
+        console.log(JSON.stringify(this.activeModel.serialize()))
     }
 
     public getActiveDiagram(): SRD.DiagramModel {
