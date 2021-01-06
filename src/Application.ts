@@ -2,6 +2,7 @@ import * as SRD from '@projectstorm/react-diagrams';
 import { SimplePortFactory } from './components/SimplePortFactory'
 import { HTMLNodeFactory } from './components/HTMLNodeFactory'
 import { HTMLPortModel } from './components/HTMLPortModel'
+import { HTMLNodeModel } from './components/HTMLNodeModel'
 
 /**
  * @author Dylan Vorster
@@ -34,10 +35,13 @@ export class Application {
         let port2 = node2.addInPort('In');
         node2.setPosition(400, 100);
 
+        var node3 = new HTMLNodeModel();
+	    node3.setPosition(250, 108);
+
         // link the ports
         let link1 = port.link(port2);
 
-        this.activeModel.addAll(node1, node2, link1);
+        this.activeModel.addAll(node1, node2, link1, node3);
         console.log(JSON.stringify(this.activeModel.serialize()))
     }
 
