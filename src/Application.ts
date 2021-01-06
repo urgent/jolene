@@ -1,4 +1,7 @@
 import * as SRD from '@projectstorm/react-diagrams';
+import { SimplePortFactory } from './components/SimplePortFactory'
+import { HTMLNodeFactory } from './components/HTMLNodeFactory'
+import { HTMLPortModel } from './components/HTMLPortModel'
 
 /**
  * @author Dylan Vorster
@@ -11,6 +14,10 @@ export class Application {
         this.diagramEngine = SRD.default();
         this.newModel();
         this.activeModel = new SRD.DiagramModel();
+        this.diagramEngine
+            .getPortFactories()
+            .registerFactory(new SimplePortFactory('diamond', (config) => new HTMLPortModel(SRD.PortModelAlignment.LEFT)));
+        this.diagramEngine.getNodeFactories().registerFactory(new HTMLNodeFactory());
     }
 
     public newModel() {
