@@ -19,11 +19,19 @@ export class Application {
             .getPortFactories()
             .registerFactory(new SimplePortFactory('diamond', (config) => new HTMLPortModel(SRD.PortModelAlignment.LEFT)));
         this.diagramEngine.getNodeFactories().registerFactory(new HTMLNodeFactory());
+        this.diagramEngine.registerListener({
+            addNodeListener: event => {
+                this.diagramEngine.getModel().addNode(new HTMLNodeModel())
+                this.diagramEngine.repaintCanvas();
+            },
+          })
     }
 
     public newModel() {
         this.activeModel = new SRD.DiagramModel();
         this.diagramEngine.setModel(this.activeModel);
+
+        
 
         //3-A) create a default node
         var node1 = new SRD.DefaultNodeModel('Node 1', 'rgb(0,192,255)');
@@ -40,6 +48,9 @@ export class Application {
 
         // link the ports
         let link1 = port.link(port2);
+        
+        
+        
 
         this.activeModel.addAll(node1, node2, link1, node3);
         console.log(JSON.stringify(this.activeModel.serialize()))

@@ -86,6 +86,7 @@ export class HTMLNodeWidget extends React.Component<DefaultNodeProps> {
 					<TitleName>Custom{this.props.node.getOptions().name}</TitleName>
 				</Title>
 				<textarea />
+				<button onClick={(event) => this.props.engine.fireEvent(event, 'addNodeListener')}>+</button>
 				<Ports>
 					<PortWidget
 						style={{
