@@ -20,8 +20,14 @@ export class Application {
             .registerFactory(new SimplePortFactory('diamond', (config) => new HTMLPortModel(SRD.PortModelAlignment.LEFT)));
         this.diagramEngine.getNodeFactories().registerFactory(new HTMLNodeFactory());
         this.diagramEngine.registerListener({
-            addNodeListener: event => {
-                this.diagramEngine.getModel().addNode(new HTMLNodeModel())
+            addNodeListener: (event) => {
+                const e = event as unknown as MouseEvent;
+                const node = new HTMLNodeModel();
+                const offset = (Math.floor(Math.random() * 500) + 1) / 1000;
+                const bias = 150;
+                console.log(e)
+                node.setPosition((e.clientX-bias)*(1 + offset), (e.clientY-bias)*(1 + offset))
+                this.diagramEngine.getModel().addNode(node)
                 this.diagramEngine.repaintCanvas();
             },
           })
