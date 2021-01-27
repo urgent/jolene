@@ -15,7 +15,12 @@ export class Application {
     protected activeModel: SRD.DiagramModel;
     protected diagramEngine: SRD.DiagramEngine;
 
+    protected inPrompt:boolean;
+    protected questionNode:SRD.NodeModel<SRD.NodeModelGenerics>;
+
     constructor() {
+        this.inPrompt = false;
+        this.questionNode = new QuestionNodeModel();
         this.diagramEngine = SRD.default();
         this.newModel();
         this.activeModel = new SRD.DiagramModel();
@@ -29,14 +34,27 @@ export class Application {
         this.diagramEngine.getNodeFactories().registerFactory(new PromptNodeFactory());
         this.diagramEngine.registerListener({
             addNodeListener: (event) => {
-                const e = event as unknown as MouseEvent;
-                const node = new PromptNodeModel();
-                const offset = (Math.floor(Math.random() * 500) + 1) / 1000;
-                const bias = 150;
-                console.log(e)
-                node.setPosition((e.clientX-bias)*(1 + offset), (e.clientY-bias)*(1 + offset))
-                this.diagramEngine.getModel().addNode(node)
-                this.diagramEngine.repaintCanvas();
+                if(!this.inPrompt) {
+                    this.inPrompt = true;
+
+                    const e = event as unknown as MouseEvent;
+                    const node = new PromptNodeModel();
+                    const offset = (Math.floor(Math.random() * 500) + 1) / 1000;
+                    const bias = 150;
+                    console.log(e)
+                    node.setPosition((e.clientX-bias)*(1 + offset), (e.clientY-bias)*(1 + offset))
+                    this.diagramEngine.getModel().addNode(node)
+                    
+                    
+
+                    let link = node.port.createLinkModel();
+                    
+                    link?.setSourcePort(node.port);
+                    link?.setTargetPort(this.questionNode.getPorts().right as SRD.PortModel<SRD.PortModelGenerics>);
+                    console.log(link);
+                    this.diagramEngine.getModel().addLink(link as SRD.LinkModel<SRD.LinkModelGenerics>);
+                    this.diagramEngine.repaintCanvas();
+                }
             },
           })
     }
@@ -44,30 +62,8 @@ export class Application {
     public newModel() {
         this.activeModel = new SRD.DiagramModel();
         this.diagramEngine.setModel(this.activeModel);
-
-        
-
-        //3-A) create a default node
-        var node1 = new SRD.DefaultNodeModel('Node 1', 'rgb(0,192,255)');
-        let port = node1.addOutPort('Out');
-        node1.setPosition(100, 100);
-
-        //3-B) create another default node
-        var node2 = new SRD.DefaultNodeModel('Node 2', 'rgb(192,255,0)');
-        let port2 = node2.addInPort('In');
-        node2.setPosition(400, 100);
-
-        var node3 = new QuestionNodeModel();
-        node3.setPosition(250, 108);
-        
-
-        // link the ports
-        let link1 = port.link(port2);
-        
-        
-        
-
-        this.activeModel.addAll(node1, node2, link1, node3);
+        this.questionNode.setPosition(250, 108);
+        this.activeModel.addAll(this.questionNode);
         console.log(JSON.stringify(this.activeModel.serialize()))
     }
 

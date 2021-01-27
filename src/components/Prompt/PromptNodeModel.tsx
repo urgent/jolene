@@ -1,4 +1,4 @@
-import { NodeModel, NodeModelGenerics, PortModelAlignment } from '@projectstorm/react-diagrams-core';
+import { NodeModel, NodeModelGenerics, PortModelAlignment, PortModelGenerics, PortModel } from '@projectstorm/react-diagrams-core';
 import { PromptPortModel } from './PromptPortModel';
 
 export interface PromptNodeModelGenerics {
@@ -6,11 +6,12 @@ export interface PromptNodeModelGenerics {
 }
 
 export class PromptNodeModel extends NodeModel<NodeModelGenerics & PromptNodeModelGenerics> {
-	
+	public port: PortModel<PortModelGenerics>
+
 	constructor() {
 		super({
 			type: 'prompt',
 		});
-		this.addPort(new PromptPortModel(PortModelAlignment.LEFT));
+		this.port = this.addPort(new PromptPortModel(PortModelAlignment.LEFT));
 	}
 }

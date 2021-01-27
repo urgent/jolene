@@ -1,6 +1,6 @@
-import { LinkModel, PortModel, DefaultLinkModel, PortModelAlignment } from '@projectstorm/react-diagrams';
+import { LinkModel, DefaultPortModel, DefaultLinkModel, PortModelAlignment } from '@projectstorm/react-diagrams';
 
-export class PromptPortModel extends PortModel {
+export class PromptPortModel extends DefaultPortModel {
 	constructor(alignment: PortModelAlignment) {
 		super({
 			type: 'prompt',
