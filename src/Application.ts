@@ -4,6 +4,10 @@ import { QuestionNodeFactory } from './components/Question/QuestionNodeFactory'
 import { QuestionPortModel } from './components/Question/QuestionPortModel'
 import { QuestionNodeModel } from './components/Question/QuestionNodeModel'
 
+import { PromptNodeFactory } from './components/Prompt/PromptNodeFactory'
+import { PromptPortModel } from './components/Prompt/PromptPortModel'
+import { PromptNodeModel } from './components/Prompt/PromptNodeModel'
+
 /**
  * @author Dylan Vorster
  */
@@ -17,12 +21,16 @@ export class Application {
         this.activeModel = new SRD.DiagramModel();
         this.diagramEngine
             .getPortFactories()
-            .registerFactory(new SimplePortFactory('question', (config) => new QuestionPortModel(SRD.PortModelAlignment.LEFT)));
+            .registerFactory(new SimplePortFactory('question', (config) => new QuestionPortModel(SRD.PortModelAlignment.RIGHT)));
+        this.diagramEngine
+            .getPortFactories()
+            .registerFactory(new SimplePortFactory('prompt', (config) => new PromptPortModel(SRD.PortModelAlignment.RIGHT)));            
         this.diagramEngine.getNodeFactories().registerFactory(new QuestionNodeFactory());
+        this.diagramEngine.getNodeFactories().registerFactory(new PromptNodeFactory());
         this.diagramEngine.registerListener({
             addNodeListener: (event) => {
                 const e = event as unknown as MouseEvent;
-                const node = new QuestionNodeModel();
+                const node = new PromptNodeModel();
                 const offset = (Math.floor(Math.random() * 500) + 1) / 1000;
                 const bias = 150;
                 console.log(e)
