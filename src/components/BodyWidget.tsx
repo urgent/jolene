@@ -22,10 +22,10 @@ export interface BodyWidgetProps {
 
 	export const Header = styled.div`
 		display: flex;
-		background: rgb(30, 30, 30);
+		background: #FFF;
 		flex-grow: 0;
 		flex-shrink: 0;
-		color: white;
+		color: #45496e;
 		font-family: Helvetica, Arial, sans-serif;
 		padding: 10px;
 		align-items: center;
@@ -75,7 +75,7 @@ export class BodyWidget extends React.Component<BodyWidgetProps> {
 						onDragOver={(event) => {
 							event.preventDefault();
 						}}>
-						<DemoCanvasWidget>
+						<DemoCanvasWidget background="#454b6b" color="#535779">
 							<CanvasWidget engine={this.props.app.getDiagramEngine()} />
 						</DemoCanvasWidget>
 					</Layer>

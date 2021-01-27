@@ -1,8 +1,8 @@
 import * as SRD from '@projectstorm/react-diagrams';
 import { SimplePortFactory } from './components/SimplePortFactory'
-import { QuestionNodeFactory } from './components/QuestionNodeFactory'
-import { QuestionPortModel } from './components/QuestionPortModel'
-import { QuestionNodeModel } from './components/QuestionNodeModel'
+import { QuestionNodeFactory } from './components/Question/QuestionNodeFactory'
+import { QuestionPortModel } from './components/Question/QuestionPortModel'
+import { QuestionNodeModel } from './components/Question/QuestionNodeModel'
 
 /**
  * @author Dylan Vorster
@@ -17,7 +17,7 @@ export class Application {
         this.activeModel = new SRD.DiagramModel();
         this.diagramEngine
             .getPortFactories()
-            .registerFactory(new SimplePortFactory('diamond', (config) => new QuestionPortModel(SRD.PortModelAlignment.LEFT)));
+            .registerFactory(new SimplePortFactory('question', (config) => new QuestionPortModel(SRD.PortModelAlignment.LEFT)));
         this.diagramEngine.getNodeFactories().registerFactory(new QuestionNodeFactory());
         this.diagramEngine.registerListener({
             addNodeListener: (event) => {
@@ -50,7 +50,8 @@ export class Application {
         node2.setPosition(400, 100);
 
         var node3 = new QuestionNodeModel();
-	    node3.setPosition(250, 108);
+        node3.setPosition(250, 108);
+        
 
         // link the ports
         let link1 = port.link(port2);
