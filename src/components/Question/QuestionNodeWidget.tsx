@@ -54,7 +54,6 @@ export const Node = styled.div<{ background: string; selected: boolean }>`
 
 	export const Ports = styled.div`
 		display: flex;
-		background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2));
 	`;
 
 	export const PortsContainer = styled.div`
@@ -73,12 +72,13 @@ export const Node = styled.div<{ background: string; selected: boolean }>`
 		width: 16px;
 		height: 16px;
 		z-index: 10;
-		background: rgba(0, 0, 0, 0.5);
+		background: #3ccfa0;
 		border-radius: 8px;
 		cursor: pointer;
 		&:hover {
-			background: rgba(0, 0, 0, 1);
+			background: #0F0;
 		}
+		margin: 20px 5px;
 	`;
 
 
@@ -96,50 +96,20 @@ export class QuestionNodeWidget extends React.Component<DefaultNodeProps> {
 				data-default-node-name={this.props.node.getOptions().name}
 				selected={this.props.node.isSelected()}
 				background={this.props.node.getOptions().color!}>
-				<textarea placeholder='Type your question here' />
+				<div style={{display:"flex",  backgroundImage: "linear-gradient(0deg, #FDFFFF, #FFF)"}}>
+					<textarea placeholder='Type your question here' />
+					<Ports>
+						<PortWidget
+							style={{
+							}}
+							port={this.props.node.getPort(PortModelAlignment.RIGHT)!}
+							engine={this.props.engine}>
+							<Port />
+						</PortWidget>
+					</Ports>
+				</div>
 				<button onClick={(event) => this.props.engine.fireEvent(event, 'addNodeListener')}>+</button>
-				<Ports>
-					<PortWidget
-						style={{
-							left: 100 / 2 - 8,
-							top: -8,
-							position: 'absolute'
-						}}
-						port={this.props.node.getPort(PortModelAlignment.TOP)!}
-						engine={this.props.engine}>
-						<Port />
-					</PortWidget>
-					<PortWidget
-						style={{
-							left: 100 / 2 - 8,
-							top: -8,
-							position: 'absolute'
-						}}
-						port={this.props.node.getPort(PortModelAlignment.RIGHT)!}
-						engine={this.props.engine}>
-						<Port />
-					</PortWidget>
-					<PortWidget
-						style={{
-							left: 100 / 2 - 8,
-							top: -8,
-							position: 'absolute'
-						}}
-						port={this.props.node.getPort(PortModelAlignment.BOTTOM)!}
-						engine={this.props.engine}>
-						<Port />
-					</PortWidget>
-					<PortWidget
-						style={{
-							left: 100 / 2 - 8,
-							top: -8,
-							position: 'absolute'
-						}}
-						port={this.props.node.getPort(PortModelAlignment.LEFT)!}
-						engine={this.props.engine}>
-						<Port />
-					</PortWidget>
-				</Ports>
+				
 			</Node>
 		);
 	}
