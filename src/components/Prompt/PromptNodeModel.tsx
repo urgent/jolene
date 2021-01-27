@@ -11,10 +11,6 @@ export class PromptNodeModel extends NodeModel<NodeModelGenerics & PromptNodeMod
 		super({
 			type: 'prompt',
 		});
-		
-		this.addPort(new PromptPortModel(PortModelAlignment.TOP));
 		this.addPort(new PromptPortModel(PortModelAlignment.LEFT));
-		this.addPort(new PromptPortModel(PortModelAlignment.BOTTOM));
-		this.addPort(new PromptPortModel(PortModelAlignment.RIGHT));
 	}
 }

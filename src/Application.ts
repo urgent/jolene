@@ -24,7 +24,7 @@ export class Application {
             .registerFactory(new SimplePortFactory('question', (config) => new QuestionPortModel(SRD.PortModelAlignment.RIGHT)));
         this.diagramEngine
             .getPortFactories()
-            .registerFactory(new SimplePortFactory('prompt', (config) => new PromptPortModel(SRD.PortModelAlignment.RIGHT)));            
+            .registerFactory(new SimplePortFactory('prompt', (config) => new PromptPortModel(SRD.PortModelAlignment.LEFT)));            
         this.diagramEngine.getNodeFactories().registerFactory(new QuestionNodeFactory());
         this.diagramEngine.getNodeFactories().registerFactory(new PromptNodeFactory());
         this.diagramEngine.registerListener({
