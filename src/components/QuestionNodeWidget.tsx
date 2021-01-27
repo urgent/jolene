@@ -71,7 +71,7 @@ export const Node = styled.div<{ background: string; selected: boolean }>`
 /**
  * @author Dylan Vorster
  */
-export class HTMLNodeWidget extends React.Component<DefaultNodeProps> {
+export class QuestionNodeWidget extends React.Component<DefaultNodeProps> {
 	generatePort = (port:DefaultPortModel) => {
 		return <DefaultPortLabel engine={this.props.engine} port={port} key={port.getID()} />;
 	};

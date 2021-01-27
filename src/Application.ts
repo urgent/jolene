@@ -1,8 +1,8 @@
 import * as SRD from '@projectstorm/react-diagrams';
 import { SimplePortFactory } from './components/SimplePortFactory'
-import { HTMLNodeFactory } from './components/HTMLNodeFactory'
-import { HTMLPortModel } from './components/HTMLPortModel'
-import { HTMLNodeModel } from './components/HTMLNodeModel'
+import { QuestionNodeFactory } from './components/QuestionNodeFactory'
+import { QuestionPortModel } from './components/QuestionPortModel'
+import { QuestionNodeModel } from './components/QuestionNodeModel'
 
 /**
  * @author Dylan Vorster
@@ -17,12 +17,12 @@ export class Application {
         this.activeModel = new SRD.DiagramModel();
         this.diagramEngine
             .getPortFactories()
-            .registerFactory(new SimplePortFactory('diamond', (config) => new HTMLPortModel(SRD.PortModelAlignment.LEFT)));
-        this.diagramEngine.getNodeFactories().registerFactory(new HTMLNodeFactory());
+            .registerFactory(new SimplePortFactory('diamond', (config) => new QuestionPortModel(SRD.PortModelAlignment.LEFT)));
+        this.diagramEngine.getNodeFactories().registerFactory(new QuestionNodeFactory());
         this.diagramEngine.registerListener({
             addNodeListener: (event) => {
                 const e = event as unknown as MouseEvent;
-                const node = new HTMLNodeModel();
+                const node = new QuestionNodeModel();
                 const offset = (Math.floor(Math.random() * 500) + 1) / 1000;
                 const bias = 150;
                 console.log(e)
@@ -49,7 +49,7 @@ export class Application {
         let port2 = node2.addInPort('In');
         node2.setPosition(400, 100);
 
-        var node3 = new HTMLNodeModel();
+        var node3 = new QuestionNodeModel();
 	    node3.setPosition(250, 108);
 
         // link the ports
