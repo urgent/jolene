@@ -44,16 +44,17 @@ export class Application {
                     console.log(e)
                     node.setPosition((e.clientX-bias)*(1 + offset), (e.clientY-bias)*(1 + offset))
                     this.diagramEngine.getModel().addNode(node)
-                    
-                    
+                    const questionNode = this.questionNode
+                    const diagramEngine = this.diagramEngine;
 
                     let link = node.port.createLinkModel();
-                    
                     link?.setSourcePort(node.port);
-                    link?.setTargetPort(this.questionNode.getPorts().right as SRD.PortModel<SRD.PortModelGenerics>);
-                    console.log(link);
-                    this.diagramEngine.getModel().addLink(link as SRD.LinkModel<SRD.LinkModelGenerics>);
-                    this.diagramEngine.repaintCanvas();
+                    link?.setTargetPort(questionNode.getPorts().right as SRD.PortModel<SRD.PortModelGenerics>);
+                    // avoids 0,0 link
+                    node.port.reportPosition()
+                    questionNode.getPorts().right.reportPosition()
+                    diagramEngine.getModel().addLink(link as SRD.LinkModel<SRD.LinkModelGenerics>);
+                    diagramEngine.repaintCanvas();
                 }
             },
           })
