@@ -3,10 +3,10 @@ import { SimplePortFactory } from './components/SimplePortFactory'
 import { QuestionNodeFactory } from './components/Question/QuestionNodeFactory'
 import { QuestionPortModel } from './components/Question/QuestionPortModel'
 import { QuestionNodeModel } from './components/Question/QuestionNodeModel'
-
 import { PromptNodeFactory } from './components/Prompt/PromptNodeFactory'
 import { PromptPortModel } from './components/Prompt/PromptPortModel'
 import { PromptNodeModel } from './components/Prompt/PromptNodeModel'
+import { AdvancedLinkFactory } from './components/Arrow/AdvancedLinkFactory'
 
 /**
  * @author Dylan Vorster
@@ -32,24 +32,23 @@ export class Application {
             .registerFactory(new SimplePortFactory('prompt', (config) => new PromptPortModel(SRD.PortModelAlignment.LEFT)));            
         this.diagramEngine.getNodeFactories().registerFactory(new QuestionNodeFactory());
         this.diagramEngine.getNodeFactories().registerFactory(new PromptNodeFactory());
+        this.diagramEngine.getLinkFactories().registerFactory(new AdvancedLinkFactory());
         this.diagramEngine.registerListener({
             addNodeListener: (event) => {
                 if(!this.inPrompt) {
                     this.inPrompt = true;
-
                     const e = event as unknown as MouseEvent;
                     const node = new PromptNodeModel();
                     const offset = (Math.floor(Math.random() * 500) + 1) / 1000;
-                    const bias = 150;
-                    console.log(e)
-                    node.setPosition((e.clientX-bias)*(1 + offset), (e.clientY-bias)*(1 + offset))
+                    const xbias = -100;
+                    const ybias = -250;
+                    node.setPosition((e.clientX + xbias) * (1 + offset), (e.clientY + ybias) * (1 + offset))
                     this.diagramEngine.getModel().addNode(node)
                     const questionNode = this.questionNode
                     const diagramEngine = this.diagramEngine;
-
                     let link = node.port.createLinkModel();
-                    link?.setSourcePort(node.port);
-                    link?.setTargetPort(questionNode.getPorts().right as SRD.PortModel<SRD.PortModelGenerics>);
+                    link?.setSourcePort(questionNode.getPorts().right as SRD.PortModel<SRD.PortModelGenerics>);
+                    link?.setTargetPort(node.port);
                     // avoids 0,0 link
                     node.port.reportPosition()
                     questionNode.getPorts().right.reportPosition()

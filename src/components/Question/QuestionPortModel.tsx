@@ -1,5 +1,5 @@
-import { LinkModel, PortModel, DefaultLinkModel, PortModelAlignment } from '@projectstorm/react-diagrams';
-
+import { LinkModel, PortModel, PortModelAlignment } from '@projectstorm/react-diagrams';
+import { AdvancedLinkModel } from '../Arrow/AdvancedLinkModel'
 export class QuestionPortModel extends PortModel {
 	constructor(alignment: PortModelAlignment) {
 		super({
@@ -10,6 +10,6 @@ export class QuestionPortModel extends PortModel {
 	}
 
 	createLinkModel(): LinkModel {
-		return new DefaultLinkModel();
+		return new AdvancedLinkModel();
 	}
 }
