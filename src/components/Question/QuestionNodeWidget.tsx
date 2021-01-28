@@ -22,11 +22,11 @@ export const Node = styled.div<{ background: string; selected: boolean }>`
 
 		background:#edeef9;
 		width:200px;
-		height:100px;
 		text-align:center;
 
 		textarea {
 			margin:10px;
+			resize: vertical;
 		}
 		
 		button {
@@ -34,9 +34,11 @@ export const Node = styled.div<{ background: string; selected: boolean }>`
 			border-radius: 2px;
 			border:none;
 			color:#FFF;
-			margin: 30px;
 			font-weight: bold;
 			font-size: 150%;
+			bottom: -10px;
+			margin-top: 10px;
+			position: relative;
 		}
 	`;
 
@@ -86,6 +88,9 @@ export const Node = styled.div<{ background: string; selected: boolean }>`
  * @author Dylan Vorster
  */
 export class QuestionNodeWidget extends React.Component<DefaultNodeProps> {
+	private isTyping: boolean = false;
+	private isResizing: boolean = false;
+
 	generatePort = (port:DefaultPortModel) => {
 		return <DefaultPortLabel engine={this.props.engine} port={port} key={port.getID()} />;
 	};
@@ -96,17 +101,53 @@ export class QuestionNodeWidget extends React.Component<DefaultNodeProps> {
 				data-default-node-name={this.props.node.getOptions().name}
 				selected={this.props.node.isSelected()}
 				background={this.props.node.getOptions().color!}>
-				<div style={{display:"flex",  backgroundImage: "linear-gradient(0deg, #FDFFFF, #FFF)"}}>
-					<textarea placeholder='Type your question here' />
+				<div style={{
+					fontSize:"1rem", 
+					color: "#454b6b", 
+					padding: "12px",
+					textAlign: "left",
+					fontWeight: "bold",
+					letterSpacing: "-0.7px"}}>Welcome</div>
+				<div style={{
+					display:"flex",  
+					backgroundImage: "linear-gradient(0deg, #FDFFFF, #FFF)",     
+				}}>
+					<textarea 
+						onMouseDown={() => {
+							this.isResizing = true;
+							this.props.node.setLocked(true)
+						}} 
+						onMouseUp={() => {
+							this.isResizing = false;
+							if(!this.isTyping) {
+								this.props.node.setLocked(false)
+							}
+						}}
+						onFocus={() => {
+							this.isTyping = true;
+							this.props.node.setLocked(true)
+						}}
+						onBlur={() => {
+							this.isTyping = false;
+							this.props.node.setLocked(false)
+						}}
+						placeholder='Type your question here' 
+					/>
 					<Ports>
 						<PortWidget
 							style={{
+								display: "flex",
+								justifyContent: "center",
+								flexDirection: "column"
 							}}
 							port={this.props.node.getPort(PortModelAlignment.RIGHT)!}
 							engine={this.props.engine}>
 							<Port />
 						</PortWidget>
 					</Ports>
+				</div>
+				<div style={{width:"100%;", background:"#FFF"}} >
+					<img onDragStart={(e) => { e.preventDefault(); }} src="/demo.gif" alt="Funny ms paint toon drawing of dog eating cupcake" />
 				</div>
 				<button onClick={(event) => this.props.engine.fireEvent(event, 'addNodeListener')}>+</button>
 				
