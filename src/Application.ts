@@ -17,10 +17,12 @@ export class Application {
 
     protected inPrompt:boolean;
     protected questionNode:SRD.NodeModel<SRD.NodeModelGenerics>;
+    protected rightPort:boolean;
 
     constructor() {
         this.inPrompt = false;
         this.questionNode = new QuestionNodeModel();
+        this.rightPort = true;
         this.diagramEngine = SRD.default();
         this.newModel();
         this.activeModel = new SRD.DiagramModel();
@@ -36,7 +38,7 @@ export class Application {
         this.diagramEngine.registerListener({
             addNodeListener: (event) => {
                 if(!this.inPrompt) {
-                    this.inPrompt = true;
+                    //this.inPrompt = true;
                     const e = event as unknown as MouseEvent;
                     const node = new PromptNodeModel();
                     const offset = (Math.floor(Math.random() * 500) + 1) / 1000;
@@ -47,13 +49,25 @@ export class Application {
                     const questionNode = this.questionNode
                     const diagramEngine = this.diagramEngine;
                     let link = node.port.createLinkModel();
-                    link?.setSourcePort(questionNode.getPorts().right as SRD.PortModel<SRD.PortModelGenerics>);
+                    if(this.rightPort) {
+                        link?.setSourcePort(questionNode.getPorts().right as SRD.PortModel<SRD.PortModelGenerics>);
+                    } else {
+                        link?.setSourcePort(questionNode.getPorts().left as SRD.PortModel<SRD.PortModelGenerics>);
+                    }
+                    
                     link?.setTargetPort(node.port);
                     // avoids 0,0 link
                     node.port.reportPosition()
-                    questionNode.getPorts().right.reportPosition()
+                    if(this.rightPort) {
+                        questionNode.getPorts().right.reportPosition()
+                        this.rightPort = false;
+                    } else {
+                        questionNode.getPorts().left.reportPosition()
+                        this.rightPort = true;
+                    }
                     diagramEngine.getModel().addLink(link as SRD.LinkModel<SRD.LinkModelGenerics>);
                     diagramEngine.repaintCanvas();
+                    this.questionNode = node
                 }
             },
           })
