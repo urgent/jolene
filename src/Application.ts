@@ -15,14 +15,15 @@ export class Application {
     protected activeModel: SRD.DiagramModel;
     protected diagramEngine: SRD.DiagramEngine;
 
-    protected inPrompt:boolean;
-    protected questionNode:SRD.NodeModel<SRD.NodeModelGenerics>;
-    protected rightPort:boolean;
+    
+    protected focusNode:SRD.NodeModel<SRD.NodeModelGenerics>;
+    protected inQuestion:boolean;
 
     constructor() {
-        this.inPrompt = false;
-        this.questionNode = new QuestionNodeModel();
-        this.rightPort = true;
+        
+        this.focusNode = new QuestionNodeModel();
+        this.inQuestion = true
+
         this.diagramEngine = SRD.default();
         this.newModel();
         this.activeModel = new SRD.DiagramModel();
@@ -37,38 +38,51 @@ export class Application {
         this.diagramEngine.getLinkFactories().registerFactory(new AdvancedLinkFactory());
         this.diagramEngine.registerListener({
             addNodeListener: (event) => {
-                if(!this.inPrompt) {
-                    //this.inPrompt = true;
+                
                     const e = event as unknown as MouseEvent;
-                    const node = new PromptNodeModel();
+                    
                     const offset = (Math.floor(Math.random() * 500) + 1) / 1000;
                     const xbias = -100;
                     const ybias = -250;
+                    
+                    let node;
+                    let link;
+                    if(this.inQuestion) {
+                        node = new PromptNodeModel();
+                        this.inQuestion = false;
+                        link = node.leftPort.createLinkModel();
+                        link?.setSourcePort(this.focusNode.getPorts().right as SRD.PortModel<SRD.PortModelGenerics>);
+
+                        link?.setTargetPort(node.leftPort);
+                        // avoids 0,0 link
+                        node.leftPort.reportPosition()
+                        this.focusNode.getPorts().right.reportPosition()
+                    } else {
+                        node = new QuestionNodeModel();
+                        this.inQuestion = true;
+
+                        link = node.leftPort.createLinkModel();
+                        link?.setSourcePort(this.focusNode.getPorts().right as SRD.PortModel<SRD.PortModelGenerics>);
+
+                        link?.setTargetPort(node.leftPort);
+                        // avoids 0,0 link
+                        node.leftPort.reportPosition()
+                        this.focusNode.getPorts().right.reportPosition()
+                    }    
+
                     node.setPosition((e.clientX + xbias) * (1 + offset), (e.clientY + ybias) * (1 + offset))
                     this.diagramEngine.getModel().addNode(node)
-                    const questionNode = this.questionNode
-                    const diagramEngine = this.diagramEngine;
-                    let link = node.port.createLinkModel();
-                    if(this.rightPort) {
-                        link?.setSourcePort(questionNode.getPorts().right as SRD.PortModel<SRD.PortModelGenerics>);
-                    } else {
-                        link?.setSourcePort(questionNode.getPorts().left as SRD.PortModel<SRD.PortModelGenerics>);
-                    }
                     
-                    link?.setTargetPort(node.port);
-                    // avoids 0,0 link
-                    node.port.reportPosition()
-                    if(this.rightPort) {
-                        questionNode.getPorts().right.reportPosition()
-                        this.rightPort = false;
-                    } else {
-                        questionNode.getPorts().left.reportPosition()
-                        this.rightPort = true;
-                    }
+
+                    const diagramEngine = this.diagramEngine;
+                    
+                    
+                    
                     diagramEngine.getModel().addLink(link as SRD.LinkModel<SRD.LinkModelGenerics>);
+
                     diagramEngine.repaintCanvas();
-                    this.questionNode = node
-                }
+
+                    this.focusNode = node
             },
           })
     }
@@ -76,8 +90,8 @@ export class Application {
     public newModel() {
         this.activeModel = new SRD.DiagramModel();
         this.diagramEngine.setModel(this.activeModel);
-        this.questionNode.setPosition(250, 108);
-        this.activeModel.addAll(this.questionNode);
+        this.focusNode.setPosition(250, 108);
+        this.activeModel.addAll(this.focusNode);
         console.log(JSON.stringify(this.activeModel.serialize()))
     }
 

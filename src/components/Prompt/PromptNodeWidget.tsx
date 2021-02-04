@@ -126,6 +126,15 @@ export class PromptNodeWidget extends React.Component<DefaultNodeProps> {
             backgroundImage: 'linear-gradient(0deg, #FDFFFF, #FFF)'
           }}
         >
+          <Ports>
+            <PortWidget
+              style={{}}
+              port={this.props.node.getPort(PortModelAlignment.LEFT)!}
+              engine={this.props.engine}
+            >
+              <Port />
+            </PortWidget>
+          </Ports>
           <textarea
             onMouseDown={() => {
               this.isResizing = true
@@ -150,13 +159,12 @@ export class PromptNodeWidget extends React.Component<DefaultNodeProps> {
           <Ports>
             <PortWidget
               style={{}}
-              port={this.props.node.getPort(PortModelAlignment.LEFT)!}
+              port={this.props.node.getPort(PortModelAlignment.RIGHT)!}
               engine={this.props.engine}
             >
               <Port />
             </PortWidget>
           </Ports>
-          <p>Which answer would you like to add?</p>
         </div>
         <button
           onClick={event => {
